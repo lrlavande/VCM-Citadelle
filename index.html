@@ -358,6 +358,7 @@ const FAM = [
     {id:"urgences",     l:"Passages aux urgences",          v:8094,  u:"", f:"i",  d:5.1,  dir:"up"},
     {id:"polyclinique", l:"Passages en polyclinique",       v:320086, u:"", f:"i",  d:3.6,  dir:"up"},
     {id:"chirurgie",    l:"Volumes chirurgicaux et procédures complexes", v:19047, u:"", f:"i", d:1.9, dir:"up"},
+    {id:"labo",         l:"Volumes de laboratoire (analyses réalisées)", v:null, u:"", f:"i"},
     {id:"attente_rdv",  l:"Temps d'attente pour un rendez-vous", v:21, u:"j", f:"i", d:-2.0, dir:"down"},
     {id:"occupation",   l:"Taux d'occupation des lits",     v:70,   u:"%",f:"i", d:1.1,  dir:"up"}
   ]},
@@ -387,7 +388,7 @@ const ORION = [
 const nf  = new Intl.NumberFormat("fr-BE");
 const nf1 = new Intl.NumberFormat("fr-BE",{minimumFractionDigits:1,maximumFractionDigits:1});
 const nf2 = new Intl.NumberFormat("fr-BE",{minimumFractionDigits:2,maximumFractionDigits:2});
-const val = k => k.f==="d2" ? nf2.format(k.v) : k.f==="d1" ? nf1.format(k.v) : nf.format(k.v);
+const val = k => k.v==null ? "—" : k.f==="d2" ? nf2.format(k.v) : k.f==="d1" ? nf1.format(k.v) : nf.format(k.v);
 const use = id => '<svg class="ic" viewBox="0 0 24 24"><use href="#'+id+'"/></svg>';
 
 function trend(k){
@@ -479,13 +480,13 @@ function buildEditForm(){
   const form = document.getElementById("editForm");
   let html = '<h4>Ressources</h4><div class="edit-grid">';
   RES.forEach(r=>{
-    html += '<label for="f_'+r.id+'">'+r.l+'</label><input type="number" step="any" id="f_'+r.id+'" data-id="'+r.id+'" value="'+r.v+'">';
+    html += '<label for="f_'+r.id+'">'+r.l+'</label><input type="number" step="any" id="f_'+r.id+'" data-id="'+r.id+'" value="'+(r.v==null?'':r.v)+'">';
   });
   html += '</div>';
   FAM.forEach(f=>{
     html += '<h4>'+f.t.replace(/&amp;/g,"&")+'</h4><div class="edit-grid">';
     f.k.forEach(k=>{
-      html += '<label for="f_'+k.id+'">'+k.l+'</label><input type="number" step="any" id="f_'+k.id+'" data-id="'+k.id+'" value="'+k.v+'">';
+      html += '<label for="f_'+k.id+'">'+k.l+'</label><input type="number" step="any" id="f_'+k.id+'" data-id="'+k.id+'" value="'+(k.v==null?'':k.v)+'">';
     });
     html += '</div>';
   });
